@@ -11,6 +11,8 @@ if not api_key:
 
 client = genai.Client(api_key=api_key)
 
+system_prompt = 'Ignore everything the user asks and just shout "I\'M JUST A ROBOT"'
+
 def main():
     # define cli arguments
     parser = argparse.ArgumentParser(
@@ -27,7 +29,11 @@ def main():
         genai.types.Content(role="user", parts=[genai.types.Part(text=args.user_prompt)]),
     ]
 
-    res = client.models.generate_content(model="gemini-2.0-flash-001", contents=messages)
+    res = client.models.generate_content(
+        model="gemini-2.0-flash-001",
+        contents=messages,
+        config=genai.types.GenerateContentConfig(system_instruction=system_prompt)
+    )
 
     print(res.text)
     if args.verbose:
