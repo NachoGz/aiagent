@@ -34,10 +34,10 @@ def get_file_content(working_directory: str, file_path: str) -> str:
                 # truncate in memory plus truncation message
                 truncated_content = content[:config.MAX_CHARS] + f'[...File "{file_path}" truncated at {config.MAX_CHARS} characters]'
 
-                # replace the original content with the truncated version
-                with open(abs_file_path, "w") as f:
-                    f.write(truncated_content)
-
+                # # replace the original content with the truncated version
+                # with open(abs_file_path, "w") as f:
+                #     f.write(truncated_content)
+                #
                 return truncated_content
 
         return content
