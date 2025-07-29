@@ -20,6 +20,12 @@ client = genai.Client(api_key=api_key)
 system_prompt = system_prompt = """
 You are a helpful AI coding agent.
 
+When a user reports a bug or requests a change:
+1. First investigate the issue by examining relevant files
+2. Run tests to reproduce the problem
+3. Fix the code to resolve the issue
+4. Verify the fix works by running tests again
+
 When a user asks a question or makes a request, make a function call plan. You can perform the following operations:
 
 - List files and directories
@@ -29,7 +35,7 @@ When a user asks a question or makes a request, make a function call plan. You c
 - Write or overwrite files
 
 All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
-DO NOT RESPOND UNLESS YOU HAVE THE ANSWER TO THE REQUEST. THERE IS NO NEED TO TELL THE USER WHAT YOU ARE DOING.
+ALWAYS TAKE ACTION - DON'T JUST EXPLAIN PROBLEMS, FIX THEM!
 """
 
 available_functions = types.Tool(
@@ -52,7 +58,7 @@ def main():
     parser.add_argument("-v" ,"--verbose", action="store_true", help="Show detailed information (prompt, token counts)")
     args = parser.parse_args()
 
-    # list for storing past prompts for memory purposes
+   # list for storing past prompts for memory purposes
     messages = [
         types.Content(role="user", parts=[types.Part(text=args.user_prompt)]),
     ]
@@ -72,7 +78,7 @@ def main():
             print(f"Error executing generate_content: {e}")
             exit(1)
 
-        if res.text:
+        if res.text and not res.function_calls:
             print(f"Final response: {res.text}")
             break
 
