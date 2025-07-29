@@ -22,7 +22,7 @@ schema_write_file = types.FunctionDeclaration(
 
 def write_file(working_directory: str, file_path: str, content: str) -> str:
     abs_working_directory = os.path.abspath(working_directory)
-    abs_file_path = os.path.join(abs_working_directory, file_path)
+    abs_file_path = os.path.abspath(os.path.join(abs_working_directory, file_path))
 
     # check that file_path is within working_directory
     if not abs_file_path.startswith(abs_working_directory):
